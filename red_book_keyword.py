@@ -16,7 +16,7 @@ ws.append(['标题', '内容'])
 # 最新 time_descending
 # 综合 general
 def get_data(key_word, page):
-    url = f'http://whosecard.com:8081/api/xiaohongshu/search/notes/v1?key=f1211ee24a26dfefc195b3ae9da1dd79cdc3019d39d738654c46911d&keyword={key_word}&sort=popularity_descending&page={page}'
+    url = f'http://whosecard.com:8081/api/xiaohongshu/search/notes/v1?key=&keyword={key_word}&sort=popularity_descending&page={page}'
     print(url)
     resp = requests.get(url).json()
     items = resp['result']['data']['items']
