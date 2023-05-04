@@ -5,7 +5,7 @@ var navigator = {
     appCodeName: "Mozilla",
     appName: "Netscape",
     appVersion: "5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.164 Safari/537.36",
-    platform: "MacOs"
+    platform: "Win32"
 };
 
 var location = {
@@ -691,7 +691,6 @@ function sign(e, t) {
             continue;
         case "8":
             var yr = (new Date)[cr(ee, te)]();
-            // var yr = Date.now();
             continue;
         case "9":
             return {

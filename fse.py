@@ -29,7 +29,7 @@ headers = {
 
 with open('./js_signature/fse33.js', 'r', encoding='utf-8') as f:
     js = f.read()
-params, sign = execjs.compile(js).call('get_sign', '火车')
+params, sign = execjs.compile(js).call('get_sign', '火车呼啸而过')
 
 headers.update({'X-Signature': sign})
 

@@ -2,11 +2,14 @@
 
 import json
 from selenium import webdriver
+# import undetected_chromedriver as webdriver
+# from undetected_chromedriver.options import ChromeOptions
 from lxpy import copy_headers_dict
 import base64
 from Cryptodome.Cipher import AES
-
+import ssl
 from oceanengine_AES import decrypt_data
+# ssl._create_default_https_context = ssl._create_unverified_context
 
 h = copy_headers_dict('''
     accept: application/json, text/plain, */*
@@ -37,7 +40,7 @@ class Browser():
         self.api_url = kwargs.get("api_url", None)
         self.referrer = kwargs.get("referer", "https://trendinsight.oceanengine.com/")
         # TODO： update your executablePath
-        self.executablePath = kwargs.get("executablePath", r"/Users/luming/chromedriver.exe")
+        self.executablePath = kwargs.get("executablePath", r"chromedriver.exe")
 
         args = kwargs.get("browser_args", [])
         options = kwargs.get("browser_options", {})
@@ -48,8 +51,10 @@ class Browser():
             self.args = args
 
         options = webdriver.ChromeOptions()
+        # options = ChromeOptions()
         options.add_argument("--headless")
         options.add_argument("log-level=2")
+        options.add_argument("--lang=en-US")
         self.options = {
             "headless": True,
             "handleSIGINT": True,
@@ -149,5 +154,4 @@ browser = Browser()
 # test
 result = decrypt_data(get_data(keyword='lx', start_date="20210826", end_date="20210926"))
 print(result)
-
 browser.close()
