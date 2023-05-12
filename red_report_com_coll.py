@@ -13,17 +13,20 @@ from openpyxl import Workbook
 import httpx
 import pandas as pd
 
+from red_book import register_session
+
 wb = Workbook()
 ws = wb.active
 ws.append(
     ['文章作者', '作者主页', '文章标题', '文章内容', '文章链接', '文章点赞数', '文章评论数', '文章分享数', '文章收藏数',
      '文章发布时间'])
 
+
 headers = {
     'authority': 'edith.xiaohongshu.com',
     'accept': 'application/json, text/plain, */*',
     'accept-language': 'zh-CN,zh;q=0.9',
-    'cookie': 'xhsTrackerId=026c0cb3-a700-4cb3-8028-aa9250a459fb; xhsTrackerId.sig=sBicF6SeFKz1sG106f10CTLGxd1gBA1o3uVabWCNiEY; a1=186a0f1cf00cyprlnpc98qo6zobuu8jz9tm4aeaq030000818168; webId=8db5cbb3877e71dc815023bad3dcc9c8; gid=yYK08iyiWjj4yYK08iySi9d088SvUF1IUSjY6A8AlKulD4q877YVu0888YyYyKY8fdd84j22; gid.sign=z9YuhADLvkH9KOb6jOs4jijOMM4=; xhsTracker=url=explore&xhsshare=CopyLink; xhsTracker.sig=wmLdXV__wbETiz1qUgqoiY8swj2zGxC5B-xOV9HIhWg; webBuild=1.2.1; customerBeakerSessionId=c7b0ce65bf1ff687bdba186cb8121e0c6116590bgAJ9cQAoWBAAAABjdXN0b21lclVzZXJUeXBlcQFLAlgOAAAAX2NyZWF0aW9uX3RpbWVxAkdB2QH87cxqf1gJAAAAYXV0aFRva2VucQNYQQAAAGQ2MjM3ZTE1NmRhMDQ1MzViYTQ0ODhkOGMwOTU0MGVkLTljNGE2ZTE1NjIxYzRmOTY4ZmI3OTA4ZjFiMDBjYmE5cQRYAwAAAF9pZHEFWCAAAAAxODgyYWM1ODM0MmQ0MjU2OTJhMDVlODFhOWJiZGE2OXEGWA4AAABfYWNjZXNzZWRfdGltZXEHR0HZAfztzGp/WAYAAAB1c2VySWRxCFgYAAAANjI4NzAzOTNmNjgzZTMwMDAxMjgyMDZkcQl1Lg==; customerClientId=296354310261633; x-user-id-creator.xiaohongshu.com=62870393f683e3000128206d; access-token-creator.xiaohongshu.com=customer.ares.AT-1c2f5d30d2bd403b803d772cc6a2618e-33e23d08ee1f42ca8a9c2fd2bbc31efc; galaxy.creator.beaker.session.id=1678242743288047136108; extra_exp_ids=h5_230301_exp1,h5_1130_clt,ios_wx_launch_open_app_exp,h5_video_ui_exp3,wx_launch_open_app_duration_origin,ques_clt2; extra_exp_ids.sig=yi1oiDZ_OTBT0Y_iZlLv_doi507yh_p9E8YhpEcxTi8; xsecappid=xhs-pc-web; acw_tc=fe28e8aca20b9af9a2f2ffe8861c9a1d465ad0c12eda618f6c525bab23bd626e; web_session=040069768cba57210846c4563d364bcbfe6c30; websectiga=cffd9dcea65962b05ab048ac76962acee933d26157113bb213105a116241fa6c; sec_poison_id=4b205612-c63b-4d48-849e-473eba515cdf',
+    'cookie': f"web_session={register_session()}",
     'origin': 'https://www.xiaohongshu.com',
     'referer': 'https://www.xiaohongshu.com/',
     'sec-ch-ua': '"Chromium";v="110", "Not A(Brand";v="24", "Google Chrome";v="110"',
@@ -42,9 +45,10 @@ headers = {
 async def get_red_book_data(url):
     async with httpx.AsyncClient() as client:
         response = await client.get(url, headers=headers)
+        print(response.text)
         result = re.findall(r'"prevRoute":"Empty","note":(.*?),"volume":', response.text)[0]
         note = json.loads(result)
-        # print(note)
+        print(note)
         # 文章作者
         author = note['user']['nickname']
         # 作者主页
@@ -69,12 +73,12 @@ async def get_red_book_data(url):
         post_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(publish_time))
         ws.append([author, author_url, title, desc, note_url, like_count, comment_count, share_count, collect_count,
                    post_time])
-    wb.save('./data/red_book.xlsx')
+    wb.save('./data/red_book_23_05_05.xlsx')
 
 
 async def main():
     tasks = []
-    df = pd.read_excel(r'./urls.xlsx')
+    df = pd.read_excel(r'./long_urls.xlsx')
     urls = df['文章链接']
     for index, url in enumerate(urls):
         tasks.append(asyncio.create_task(get_red_book_data(url)))
