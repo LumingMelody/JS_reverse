@@ -38,10 +38,10 @@ headers = {
 def get_xs(source_note_id, cursor=None):
     if cursor is None:
         cursor = ''
-    with open('js_signature/xhs_xt.js', 'r', encoding='utf-8') as f:
+    with open('js_signature/xs20230531.js', 'r', encoding='utf-8') as f:
         js = f.read()
     crt = execjs.compile(js)
-    xs_xt = crt.call('sign', f'/api/sns/web/v2/comment/page?note_id={source_note_id}&cursor={cursor}')
+    xs_xt = crt.call('get_xs', f'/api/sns/web/v2/comment/page?note_id={source_note_id}&cursor={cursor}')
     xs_xt['X-t'] = str(xs_xt['X-t'])
     headers.update(xs_xt)
 

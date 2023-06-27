@@ -4,6 +4,7 @@
     "@babel/parser": "^7.21.2",
     "@babel/traverse": "^7.21.2",
     "@babel/types": "^7.21.2",
+    "@types/frida-gum": "^18.3.2",
     "crypto-js": "^4.1.1",
     "fs": "^0.0.1-security",
     "puppeteer": "^19.7.5"
