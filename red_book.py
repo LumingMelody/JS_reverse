@@ -1,5 +1,11 @@
-import time
+# -*- coding: utf-8 -*-
+# @Time    : 2023/5/8 10:17
+# @Author  : 蔍鸣霸霸
+# @FileName: xhs_.py
+# @Software: PyCharm
+# @Blog    ：只因你太美
 
+import time
 import pandas as pd
 from openpyxl import Workbook
 import requests, json

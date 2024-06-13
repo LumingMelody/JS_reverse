@@ -2120,4 +2120,4 @@ MD5 = function(e) {
 ]);
 
 
-console.log(sign("/api/sns/web/v1/feed",{"source_note_id":"63b2c51c000000001f001bd5"}))
+// console.log(sign("/api/sns/web/v1/feed",{"source_note_id":"63b2c51c000000001f001bd5"}))
